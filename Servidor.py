@@ -20,8 +20,9 @@ def getYahooStockQuote(symbol):
     D['low'] = L[5]
     D['vol'] = L[6]
     return D
-
+#Conexion
 conndb= sqlite3.connect('proyectoCPD.db')
+#Creación cursor
 c= conndb.cursor()
 
 
@@ -29,7 +30,7 @@ c= conndb.cursor()
 address = ('compute-0-0',6000)
 listener =Listener(address, authkey='sofia')
 conn = listener.accept()
-print'connection accepted from', listener.last_accepted 
+print'connection accepted from', listener.last_accepted
 while True:
     msg = conn.recv()
     leido= getYahooStockQuote('GOOG')
@@ -38,17 +39,17 @@ while True:
     c.execute("insert into yahoo values (:symbol, :last, :date, :change, :high, :low, :vol, 1)", leido)
     c.execute("select * from yahoo")
     print c.fetchall()
-    conndb.commit()
+    conndb.commit()#Guardar cambios
     conndb.close()
-    
-    
+
+
     if msg =='close':
             conn.close()
             break
-        
-        
-        
-        
-        
+
+
+
+
+
 
 listener.close()
