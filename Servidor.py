@@ -21,9 +21,9 @@ def getYahooStockQuote(symbol):
     D['vol'] = L[6]
     return D
 #Conexion
-conndb= sqlite3.connect('proyectoCPD.db')
+conexiondb= sqlite3.connect('proyectoCPD.db')
 #Creación cursor
-c= conndb.cursor()
+c= conexiondb.cursor()
 
 
 
