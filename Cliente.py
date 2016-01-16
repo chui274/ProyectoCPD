@@ -6,7 +6,7 @@ conndb= sqlite3.connect('proyectoCPD2.db')
 c= conndb.cursor()
 
 address = ('compute-0-0',6000)
-conn = Client(address, authkey= 'josemi')
+conn = Client(address, authkey= 'sofia')
 conn.send('close')
 leido = conn.recv()
 
