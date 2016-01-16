@@ -27,7 +27,7 @@ c= conndb.cursor()
 
 
 address = ('compute-0-0',6000)
-listener =Listener(address, authkey='josemi')
+listener =Listener(address, authkey='sofia')
 conn = listener.accept()
 print'connection accepted from', listener.last_accepted 
 while True:
