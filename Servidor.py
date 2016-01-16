@@ -29,22 +29,22 @@ c= conexiondb.cursor()
 
 address = ('compute-0-0',6000)
 listener =Listener(address, authkey='sofia')
-conn = listener.accept()
+conexion = listener.accept()
 print'connection accepted from', listener.last_accepted
 while True:
-    msg = conn.recv()
+    mensaje = conexion.recv()
     leido= getYahooStockQuote('GOOG')
-    conn.send(leido)
+    conexion.send(leido)
     replicado= 1
     c.execute("insert into yahoo values (:symbol, :last, :date, :change, :high, :low, :vol, 1)", leido)
     c.execute("select * from yahoo")
     print c.fetchall()
-    conndb.commit()#Guardar cambios
-    conndb.close()
+    conexiondb.commit()#Guardar cambios
+    conexiondb.close()
 
 
     if msg =='close':
-            conn.close()
+            conexion.close()
             break
 
 
