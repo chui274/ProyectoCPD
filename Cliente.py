@@ -6,7 +6,7 @@ conexiondb= sqlite3.connect('proyectoCPD2.db')
 #creamos un cursor, por el cual podremos ejecutar comandos SQL vía el método execute.
 c= conexiondb.cursor()
 
-address = ('compute-0-0',6000)
+address = ('compute-0-1',5901)
 conexion = Client(address, authkey= 'sofia')
 conexion.send('close')
 leido = conn.recv()
