@@ -27,7 +27,7 @@ c= conexiondb.cursor()
 
 
 
-address = ('compute-0-0',6000)
+address = ('compute-0-1',5901)
 listener =Listener(address, authkey='sofia')
 conexion = listener.accept()
 print'connection accepted from', listener.last_accepted
