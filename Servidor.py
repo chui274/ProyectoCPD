@@ -43,7 +43,7 @@ while True:
     conexiondb.close()
 
 
-    if msg =='close':
+    if mensaje =='close':
             conexion.close()
             break
 
