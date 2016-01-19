@@ -2,7 +2,9 @@ from multiprocessing.connection import Listener
 from array import array
 import urllib2
 import sqlite3
+import cPickle 
 
+conndb= sqlite3.connect('servidor.db')
 
 def getYahooStockQuote(symbol):
     url = "http://download.finance.yahoo.com/d/quotes.csv?s=%s&f=sl1d1c1hgv" % symbol
@@ -14,42 +16,42 @@ def getYahooStockQuote(symbol):
     D = {}
     D['symbol'] = L[0].replace('"','')
     D['last'] = L[1]
-    D['date'] = L[2]
+    D['fecha'] = L[2]
     D['change'] = L[3]
     D['high'] = L[4]
     D['low'] = L[5]
     D['vol'] = L[6]
     return D
-#Conexion
-conexiondb= sqlite3.connect('proyectoCPD.db')
-#Creación cursor
-c= conexiondb.cursor()
 
 
 
-address = ('compute-0-1',5901)
-listener =Listener(address, authkey='sofia')
-conexion = listener.accept()
-print'connection accepted from', listener.last_accepted
+c= conndb.cursor()
+
+
+address = ('localhost',6000)
+listener =Listener(address)
+conn = listener.accept()
+print (('connection accepted from', listener.last_accepted))
 while True:
-    mensaje = conexion.recv()
+    msg = conn.recv()
     leido= getYahooStockQuote('GOOG')
-    conexion.send(leido)
+    conn.send(leido)
     replicado= 1
-    c.execute("insert into yahoo values (:symbol, :last, :date, :change, :high, :low, :vol, 1)", leido)
-    c.execute("select * from yahoo")
-    print c.fetchall()
-    conexiondb.commit()#Guardar cambios
-    conexiondb.close()
+    # c.execute('''CREATE TABLE yahoo(symbol text, last text, fecha text, change text, high text, low text, vol text,send int)''')
+    c.execute("INSERT INTO yahoo values(:symbol, :last, :fecha, :change, :high, :low, :vol)", leido)
+    c.execute("SELECT * from yahoo")
+    resultado=c.fetchall()
+    print (resultado)
+    conndb.commit()#Guardar cambios
+    conndb.close()
 
 
-    if mensaje =='close':
-            conexion.close()
+    if msg =='close':
+            packed = cPickle.dumps(leido)
+
+            conn.close()
             break
-
-
-
-
-
+    
+    
 
 listener.close()
